@@ -1,4 +1,4 @@
-class nexus{
+class nexus {
 
   Exec {
     path => [
@@ -13,16 +13,18 @@ class nexus{
   exec{ 'nexus_down':
 	command => 'wget http://www.sonatype.org/downloads/nexus-latest-bundle.tar.gz',
 	notify  => Exec['nexus_move'],
+	timeout => 0,
   }
   
-  exec{ 'nexus_move':
-    command => 'cp nexus-2.11.4-01-bundle.tar.gz /usr/local',
+  exec { 'nexus_move':
+    command => 'cp nexus-latest-bundle.tar.gz /usr/local',
 	user    => root,
 	notify  => Exec['nexus_tar'],
+  }
   
   exec { 'nexus_tar':
     cwd     => '/usr/local',
-	command => 'tar xzvf nexus-2.11.4-01-bundle.tar.gz',
+	command => 'tar xzvf nexus-latest-bundle.tar.gz',
     user    => 'root',	
 	notify  => Exec['ln_nexus'],
   }
