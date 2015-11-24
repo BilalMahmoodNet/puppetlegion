@@ -1,4 +1,4 @@
-class maven
+class maven{
 
   package { 'maven'
     ensure => installed,
