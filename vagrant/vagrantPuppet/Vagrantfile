@@ -1,0 +1,70 @@
+Vagrant.configure("2") do |config|
+
+     # config.ssh.username = 'root'
+   #   config.ssh.password = 'vagrant'
+     # config.ssh.insert_key = 'true'
+	  
+	  num =2
+	  
+      #Define Number of RAM for each node
+       config.vm.provider "virtualbox" do |v|
+           v.customize ["modifyvm", :id, "--memory", 1024, "--vram", "13"]
+       end
+
+	   #this will turn the hardware virtualization off for your vm
+	   #"--hwvirtex", "off"                  
+       
+	   # enable the usb option
+	   #"--usb", "on"
+	   #"--usbehci", "on"
+	   
+	   #add a filter based on the desired Manufacturer and Product
+	   #"usbfilter", "add", "0", "--target", :id, "--name", "This is the identifier", "--manufacturer", "SuYin","--product", "Laptop_Integrated_Webcam_HD"
+	
+	   # enable audio drivers on VM settings
+	   #'--audio', 'coreaudio', '--audiocontroller', 'hda'
+	
+   # Provision Config for each of the nodes
+   1.upto(2) do |num|
+       nodeName = ("node" + num.to_s).to_sym
+       config.vm.define nodeName do |node|
+	   
+           node.vm.network :public_network, :public_network => "eth1"
+		   
+		   if num == 1
+		
+            
+		   
+		    node.vm.box = "ubuntu/trusty64"
+            node.vm.provision :shell,path: "bootstrap.sh"
+			#node.vm.provision :shell, inline: "hostname: master-VirtualBox"
+			#Make puppet available inside machine
+            #node.vm.provision "puppet_server"
+			node.vm.hostname = "master-VirtualBox.local"
+			
+		   else
+		
+		    node.vm.box = "ubuntu/trusty64"
+			#node.vm.box = "box-cutter/ubuntu1404-desktop"
+		    #node.vm.box = "puppetlabs/centos-7.0-64-puppet"
+		    node.vm.provision :shell,path: "bootstrap2.sh"
+			#node.vm.provision :shell, inline: "hostname agent1-VirtualBox"
+            #node.vm.provision "puppet"
+			node.vm.hostname = "agent1-VirtualBox.local"
+			
+		   end
+		   
+		   node.vm.provision :shell,inline: "echo 'node-" +num.to_s + "'>'/etc/hostname'"
+		   node.vm.provision :shell,inline: "hostname node-" +num.to_s 
+		   node.vm.synced_folder "C:\\vagrant-shared","/vagrant-share"
+		  
+           node.vm.provider "virtualbox" do |v|
+               v.name = " Server Node " + num.to_s
+			   v.gui  = true
+		       v.memory = 4096
+		       v.cpus = 1
+           end
+       end
+   end
+   
+end
