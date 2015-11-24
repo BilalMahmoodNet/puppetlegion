@@ -27,8 +27,8 @@ class jenkins {
 	notify  => Exec['jenkins_install'],
   }
   
-  exec { 'jenkins_update':
-    command => 'apt-get install jenkins',
+  exec { 'jenkins_install':
+    command => 'apt-get install -y jenkins',
 	user    => root,
   }
 	
