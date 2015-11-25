@@ -32,7 +32,7 @@ class nexus {
   exec { 'ln_nexus':
     cwd     => '/usr/local',
 	user    => root,
-	command => 'ln -s nexus2.11.4-01 nexus',
+	command => 'ln -s nexus-2.11.4-01 nexus',
   }
   
   
