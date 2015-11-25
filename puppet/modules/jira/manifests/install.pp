@@ -10,29 +10,30 @@ class jira::install{
     logoutput => true,
   }
 
-#  exec { 'wget_jira':
- #  user => root,
- #  cwd  => '/opt/',
- #  command => 'wget http://192.168.1.17/jira.bin',
- #   notify => Exec['chmod_jira'],
- # }
+  exec { 'wget_jira':
+   user => root,
+   cwd  => '/opt/',
+   command => 'wget http://192.168.1.17/jira.bin',
+    notify => Exec['chmod_jira'],
+  }
 
-# exec { 'chmod_jira':
- #  user => root,
-  # cwd  => '/opt/',
-  # command => 'chmod +x jira.bin',
-  # notify => Exec['execute'],
-# }
+ exec { 'chmod_jira':
+   user => root,
+   cwd  => '/opt/',
+   command => 'chmod a+x jira.bin',
+   notify => Exec['ran'],
+ }
   exec { 'execute':
     user => root,
     path => '/opt/',
     command => './jira.bin',
-    notify => Exec['exc1'],
+    notify => Exec['ran'],
   }
 
-   exec {'exc1':
-     user => root,
-     command => 'printf "\y\no\n2\n\opt/jira\n/var/atlassian/application-data/jira\n1\ny\n"',
-
-    }
+  exec {'ran':
+    user => root,
+    cwd  => '/opt/',
+    command =>'printf "\no\n2\n\n\n2\n8081\n8006\ny\n" | ./jira.bin',
+  }
 }
+
