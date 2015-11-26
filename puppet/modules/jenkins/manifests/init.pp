@@ -12,12 +12,12 @@ class jenkins {
   exec { 'jenkins_down':
     cwd     => '/opt/',
 	command => 'wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -',
-	notify  => Exec['jenkins_write'],
+	before  => Exec['jenkins_write'],
   }
   
   exec { 'jenkins_write':
     command => "sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'",
-	notify  => Exec['jenkins_update'],
+	before  => Exec['jenkins_update'],
 	user    => root,
   }
   
@@ -25,6 +25,7 @@ class jenkins {
   exec { 'jenkins_update':
     command => 'apt-get update',
 	user    => root,
+	before  => Package['jenkins'],
 	}
   
   package { 'jenkins':
