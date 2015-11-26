@@ -10,6 +10,7 @@ class jira::install{
     logoutput => true,
   }
 
+  #download the file
   exec { 'wget_jira':
     user    => root,
     cwd     => '/opt/',
@@ -18,6 +19,7 @@ class jira::install{
     timeout => 0,
   }
 
+  
  exec { 'chmod_jira':
    user    => root,
    cwd     => '/opt/',
