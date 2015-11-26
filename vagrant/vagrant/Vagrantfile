@@ -1,0 +1,58 @@
+Vagrant.configure("2") do |config|
+	  
+      #Define Number of RAM for each node
+	  
+	   config.vm.define "master" do |master|
+		   #master.vm.network :public_network, :public_network => "eth1"
+		    master.vm.box = "ubuntu/trusty64"
+			master.vm.network :public_network, :public_network => "eth0", :ip =>"192.168.1.98"
+		    master.vm.provision :shell,path: "master.sh"
+			master.vm.provision :shell, inline: "hostname master-VirtualBox.local"
+			master.vm.hostname = "master-VirtualBox.local"
+			
+			master.vm.provider :virtualbox do |v|
+               v.customize ["modifyvm", :id, "--memory", 1024, "--vram", "13"]
+		       v.name = "PuppetMaster"
+		       v.gui  = true
+		       v.memory = 4096
+		       v.cpus = 1
+	        end
+			
+			
+			#master.vm.provision  "shell", inline: "ssh vagrant@192.168.1.97 sh agent1Test.sh"
+			
+		  #  master.vm.provision :shell,path: "masterSignCert.sh"
+			
+		#	master.vm.provision  "shell", inline: "ssh vagrant@192.168.1.97 sh agent1SecTest.sh"
+		
+		     #You probably also want to set "PasswordAuthentication no" in your sshd_config on the guests
+			 # and add "-o StrictHostKeyChecking=no" to the ssh command above to get it to work.
+			  
+	    end
+		
+   # Provision Config for each of the nodes
+       config.vm.define "agent1" do |agent1|
+	   
+           #agent1.vm.network :public_network, :public_network => "eth1"
+		     agent1.vm.box = "ubuntu/trusty64"
+			 agent1.vm.network :public_network, :public_network => "eth0", :ip => "192.168.1.97"
+			 agent1.vm.network "forwarded_port", guest: 22, host: 2223, id: "ssh"
+             agent1.vm.provision :shell,path: "agent1.sh"	
+			 agent1.vm.provision :shell, inline: "hostname agent1-VirtualBox.local"
+			 agent1.vm.hostname = "agent1-VirtualBox.local"
+			 
+			 agent1.vm.provider :virtualbox do |v|
+                v.customize ["modifyvm", :id, "--memory", 1024, "--vram", "13"]
+		        v.name = "PuppetAgent"
+		        v.gui  = true
+		        v.memory = 4096
+		        v.cpus = 1
+	   end
+			
+	   end
+			
+		#node.vm.provision :shell,inline: "echo 'node-" +"'>'/etc/hostname'"
+		#node.vm.provision :shell,inline: "hostname node-"
+		#node.vm.synced_folder "C:\\vagrant-shared","/vagrant-share"
+		  
+end
