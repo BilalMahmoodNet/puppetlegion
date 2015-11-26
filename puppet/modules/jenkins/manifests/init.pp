@@ -21,6 +21,7 @@ class jenkins {
 	user    => root,
   }
   
+  #normal update
   exec { 'jenkins_update':
     command => 'apt-get update',
 	user    => root,
