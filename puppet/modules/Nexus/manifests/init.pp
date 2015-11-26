@@ -9,6 +9,8 @@ class nexus {
 	  '/sbin'],
 	logoutput => true,
   }
+   
+  #this downloads the file 
   
   exec{ 'nexus_down':
 	command => 'wget http://www.sonatype.org/downloads/nexus-latest-bundle.tar.gz',
