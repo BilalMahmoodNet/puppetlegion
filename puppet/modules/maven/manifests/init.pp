@@ -1,6 +1,6 @@
 class maven{
 
-  package { 'maven'
+  package { 'maven':
     ensure => installed,
   }
 
