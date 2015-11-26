@@ -26,10 +26,11 @@ class jira::install{
    command => 'chmod a+x jira.bin',
    notify  => Exec['ran'],
  }
+ 
   exec {'ran':
     user    => root,
     cwd     => '/opt/',
-    command =>'printf "\no\n2\n\n\n2\n8081\n8006\ny\n" | ./jira.bin',
+    command =>'printf "\no\n2\n\n\n2\n8085\n8007\ny\n" | ./jira.bin',
   }
 }
 
