@@ -13,7 +13,10 @@ echo "127.0.0.1       agent1-VirtualBox.local        puppet"  >> /etc/hosts
 echo "127.0.1.1       agent1-VirtualBox.local        puppet"  >> /etc/hosts
 cat /etc/newFile >> /etc/hosts
 
-sed -i '14i\runinterval = 60' >> /etc/puppet/puppet.conf
+sed -i '14i ' 
+
+echo "[agent]" >> /etc/puppet/puppet.conf
+echo "runinterval = 3000" >> /etc/puppet/puppet.conf
 
 apt-get update 
 
@@ -23,16 +26,6 @@ apt-get install –y ssh
 
 service ssh restart
 
-apt-get install -y puppet 
+curl -k https://192.168.1.98:3000/packages/current/install.bash | sudo bash
 
 puppet resource service puppet ensure=running enable=true
-
-puppet agent --test --server=master-VirtualBox.local
-
-service puppet stop
-
-service puppet start
-
-puppet agent --enable
-
-puppet agent --test --server=master-VirtualBox.local
