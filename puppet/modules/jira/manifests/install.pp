@@ -30,7 +30,7 @@ class jira::install{
   exec {'ran':
     user    => root,
     cwd     => '/opt/',
-    command =>'printf "\no\n2\n\n\n2\n8085\n8007\ny\n" | ./jira.bin',
+    command =>'printf "\no\n2\n\n\n\n\n2\n8085\n8007\ny\n" | ./jira.bin',
   }
 }
 
