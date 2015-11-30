@@ -12,7 +12,7 @@ class nexus {
    
   #this downloads the file 
   
-  exec{ 'nexus_down':
+  exec { 'nexus_down':
 	command => 'wget http://192.168.1.15/nexus-latest-bundle.tar.gz',
 	notify  => Exec['nexus_move'],
 	timeout => 0,

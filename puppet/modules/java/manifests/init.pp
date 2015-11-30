@@ -7,7 +7,7 @@ class java {
 	  '/usr/bin',
 	  '/bin',
 	  '/sbin'],
-	logoutput => true,
+	logoutput => on_failure,
   }
   
   
