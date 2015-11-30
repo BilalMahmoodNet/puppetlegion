@@ -12,16 +12,10 @@ class java {
   
   
   exec { 'install_java':
-    command => 'apt-get install -y default-jdk',
+    command => 'apt-get install -y default-jdk default-jre',
 	user    => root,
 	timeout => 0,
-	before  => Exec['install_jre'],
   }
   
-  exec { 'install_jre':
-    command => 'apt-get install -y default-jre',
-	user    => root,
-	timeout => 0,
-  }
 
 }
