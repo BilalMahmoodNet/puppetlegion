@@ -1,0 +1,78 @@
+class nexus {
+
+  Exec {
+    path => [
+	  '/usr/local/bin',
+	  '/opt/local/bin',
+	  '/usr/bin',
+	  '/bin',
+	  '/sbin'],
+	logoutput => true,
+  }
+   
+  #this downloads the file 
+
+  
+ # exec { 'nexus_down':
+ #       user    => root,
+ #       cwd     => '/usr/local',
+#	command => 'wget http://192.168.1.15/nexus-latest-bundle.tar.gz',
+#	notify  => Exec['nexus_dir'],
+#	timeout => 0,
+ # }
+  
+  exec { 'nexus_dir':
+        user    => root,
+        cwd     => '/usr/local/',
+        command => 'mkdir nexus',
+        notify  => Exec['nexus_tar']  
+  }
+
+  exec { 'nexus_tar':
+        cwd     => '/usr/local',
+       command => 'tar xzvf nexus-latest-bundle.tar.gz',
+        user    => 'root',
+        notify  => Exec['ln_nexus'],
+  }
+
+  exec { 'ln_nexus':
+        cwd     => '/usr/local/',
+	user    => root,
+	command => 'ln -s nexus-2.11.4-01/ nexus',
+        notify  => Exec['profile_nexus'],
+  }
+
+ file { '/etc/puppet/modules/nexus/file:
+        
+
+ exec { 'profile_nexus':
+         user => root,
+         command => 'cp -r /etc/puppet/modules/nexus/file  /etc/profile',
+         notify  => Exec['nexus_file'],
+      }
+
+ exec { 'nexus_file':
+        user => root,
+         command => 'cp -r /etc/puppet/modules/nexus/file /usr/local/nexus-2.11.3-01/bin',
+         notify  => Exec['cp_nexus'],
+      }
+ 
+ exec { 'cp_nexus':
+         user => root,
+         command => 'cp $NEXUS_HOME/usr/local/nexus-2.11..3-01/bin/nexus /etc/init.d/nexus',
+         notify  => Exec['chmod_nexus'],
+       }
+ 
+ exec { 'chmod_nexus':
+        user => root,
+        cwd  => '/usr/local/nexus-2.11.3-01/bin',
+        command => 'chmod 755 /etc/init.d/nexus',
+        notify  => Exec['up_nexus_defaults'],
+      }
+
+ exec { 'up_nexus_defaults':
+        user => root,
+        command => 'update-rc.d nexus defaults',
+       }  
+  
+}
