@@ -1,6 +1,10 @@
 class zabbix {
-
-  Exec {
+  
+  $zabip = $serverip
+  $zabhost = $::fqdn
+  
+ 
+ Exec {
     path => [
 	  '/usr/local/bin',
 	  '/opt/local/bin',
@@ -24,13 +28,13 @@ class zabbix {
   }
   
   exec { 'change_server':
-    command => "sed -i '85i/.*/Server=192.168.1.28' /etc/zabbix/zabbix_agentd.conf",
+    command => "sed -i '85s/.*/Server=$zabip/' /etc/zabbix/zabbix_agentd.conf",
 	user    => 'root',
 	before  => Exec['change_host'],
 	}
 	
 	exec { 'change_host':
-    command => "sed -i '137i/.*/Hostname=master-VirtualBox.local' /etc/zabbix/zabbix_agentd.conf",
+    command => "sed -i '137s/.*/Hostname=$zabhost/' /etc/zabbix/zabbix_agentd.conf",
 	user    => 'root',
 	before  => Exec['restart_zabbix'],
 	}
