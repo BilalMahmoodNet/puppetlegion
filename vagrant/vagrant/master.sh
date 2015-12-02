@@ -15,6 +15,12 @@ echo '[master]'        >> /usr/share/doc/puppet-common/examples/hiera/etc/puppet
 echo 'autosign = true' >> /usr/share/doc/puppet-common/examples/hiera/etc/puppet/puppet.conf
 
 echo "node 'agent1-VirtualBox.local'{" >> /etc/puppet/manifests/site.pp
+echo "include java"                    >> /etc/puppet/manifests/site.pp
+echo "include maven"                   >> /etc/puppet/manifests/site.pp
+echo "include jenkins"                 >> /etc/puppet/manifests/site.pp
+echo "include jira"                    >> /etc/puppet/manifests/site.pp
+echo "include git"                     >> /etc/puppet/manifests/site.pp
+echo "include nexus"                   >> /etc/puppet/manifests/site.pp
 echo '}'                               >> /etc/puppet/manifests/site.pp
 
 apt-get update 
@@ -30,12 +36,15 @@ puppet resource service puppetmaster ensure=running enable=true
 
 apt-get install -y git
 
-git config --global user.name "Your Name"
-git config --global user.email "youremail@domain.com"
-
-git config --list
-
 service puppetmaster restart 
+
+cd /etc/puppet/
+mkdir git
+cd git
+
+git clone https://github.com/BilalMahmoodNet/puppetlegion.git
+
+cp -r puppetlegion/puppet/modules  /etc/puppet/
 
 
 

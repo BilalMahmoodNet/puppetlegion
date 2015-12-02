@@ -2,15 +2,19 @@ Vagrant.configure("2") do |config|
 	  
       #Define Number of RAM for each node
 	  
-	   config.vm.define "puppet" do |puppet|
-		   #puppet.vm.network :public_network, :public_network => "eth1"
-		    puppet.vm.box = "ubuntu/trusty64"
-			puppet.vm.network :public_network, :public_network => "eth0", :ip =>"192.168.1.95"
-		    puppet.vm.provision :shell,path: "puppetEnterprise.sh"
-			puppet.vm.provision :shell, inline: "hostname master-VirtualBox.local"
-			puppet.vm.hostname = "master-VirtualBox.local"
+	   config.vm.define "puppetE" do |puppetE|
+		   #puppetE.vm.network :public_network, :public_network => "eth1"
+		    puppetE.vm.box = "ubuntu/trusty64"
 			
-			puppet.vm.provider :virtualbox do |v|
+			#puppetE.vm.network "forwarded_port", 443, 8443
+			
+		    puppetE.vm.network :public_network, ip: "192.168.1.95"
+			
+		    puppetE.vm.provision :shell,path: "puppetEnterprise.sh"
+			
+			puppetE.vm.hostname = "master.local"
+			
+			puppetE.vm.provider :virtualbox do |v|
                v.customize ["modifyvm", :id, "--memory", 1024, "--vram", "13"]
 		       v.name = "PuppetEnterprise(Master)"
 		       v.gui  = true
@@ -24,11 +28,10 @@ Vagrant.configure("2") do |config|
 	   
            #agent1.vm.network :public_network, :public_network => "eth1"
 		     agent1.vm.box = "ubuntu/trusty64"
-			 agent1.vm.network :public_network, :public_network => "eth0", :ip => "192.168.1.94"
-			 agent1.vm.network "forwarded_port", guest: 22, host: 2223, id: "ssh"
+			 	 agent1.vm.network :public_network, ip: "192.168.1.94"
              agent1.vm.provision :shell,path: "agent1.sh"	
-			 agent1.vm.provision :shell, inline: "hostname agent1-VirtualBox.local"
-			 agent1.vm.hostname = "agent1-VirtualBox.local"
+		
+			 agent1.vm.hostname = "agent1.local"
 			 
 			 agent1.vm.provider :virtualbox do |v|
                 v.customize ["modifyvm", :id, "--memory", 1024, "--vram", "13"]
