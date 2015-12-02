@@ -6,7 +6,9 @@ Vagrant.configure("2") do |config|
 		   #master.vm.network :public_network, :public_network => "eth1"
 		    master.vm.box = "ubuntu/trusty64"
 			master.vm.network :public_network, :public_network => "eth0", :ip =>"192.168.1.98"
+			master.vm.provision :shell,path: "zabbix.sh"
 		    master.vm.provision :shell,path: "master.sh"
+			
 			master.vm.provision :shell, inline: "hostname master-VirtualBox.local"
 			master.vm.hostname = "master-VirtualBox.local"
 			
