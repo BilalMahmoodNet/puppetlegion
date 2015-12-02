@@ -34,7 +34,7 @@ mysql -u zabbix -pnetbuilder zabbix < images.sql
 mysql -u zabbix -pnetbuilder zabbix < data.sql
 
 #configure php
-sed -i 's/post_max_size = 8m/post_max_size = 16m/g' /etc/php5/apache2/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 16M/g' /etc/php5/apache2/php.ini
 sed -i 's/max_execution_time = 30.*/max_execution_time = 300/' /etc/php5/apache2/php.ini
 sed -i 's/max_input_time = 60.*/max_input_time = 300/' /etc/php5/apache2/php.ini
 sed -i 's/;date.timezone =.*/date.timezone = UTC/' /etc/php5/apache2/php.ini
