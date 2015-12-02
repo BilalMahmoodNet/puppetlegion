@@ -27,7 +27,6 @@ create user 'zabbix'@'localhost' identified by 'netbuilder';
 create database zabbix;
 grant all privileges on zabbix.* to 'zabbix'@'localhost';
 flush privileges;
-exit;
 EOF
 
 mysql -u zabbix -pnetbuilder zabbix < schema.sql
@@ -35,21 +34,21 @@ mysql -u zabbix -pnetbuilder zabbix < images.sql
 mysql -u zabbix -pnetbuilder zabbix < data.sql
 
 #configure php
-sed -i 's/post_max_size = 8m.*/post_max_size = 16m/' /etc/php5/apache2/php.ini
-sed -i 's/max_execution_time = 30.*/max_execution_time = 200/' /etc/php5/apache2/php.ini
+sed -i 's/post_max_size = 8m/post_max_size = 16m/g' /etc/php5/apache2/php.ini
+sed -i 's/max_execution_time = 30.*/max_execution_time = 300/' /etc/php5/apache2/php.ini
 sed -i 's/max_input_time = 60.*/max_input_time = 300/' /etc/php5/apache2/php.ini
 sed -i 's/;date.timezone =.*/date.timezone = UTC/' /etc/php5/apache2/php.ini
 
 cp /usr/share/doc/zabbix-frontend-php/examples/zabbix.conf.php.example /etc/zabbix/zabbix.conf.php
 
-sed -i 's/$DB['PASSWORD'] =.*/$DB['PASSWORD'] = netbuilder/' /etc/zabbix/zabbix.conf.php
+sed -i 's/zabbix_password/netbuilder/' /etc/zabbix/zabbix.conf.php
 
 #configure additional files
 mkdir /etc/apache2/conf.d
 cp /usr/share/doc/zabbix-frontend-php/examples/apache.conf /etc/apache2/conf.d/zabbix.conf
 a2enmod alias
 service apache2 restart
-sed -i 's/Start=no.*/Start=yes/' /etc/default/zabbix-server
+sed -i 's/START=no.*/START=yes/' /etc/default/zabbix-server
 service zabbix-server start
 cp /usr/share/doc/zabbix-frontend-php/examples/apache.conf /etc/apache2/conf-available/zabbix.conf
 a2enconf zabbix.conf
