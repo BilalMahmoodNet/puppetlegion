@@ -61,8 +61,6 @@ echo 'q_puppetdb_database_user=root'           >> /etc/my_answers.txt
  apt-get install –y ssh
 
  service ssh restart
-
- sudo ufw disable
  
  mkdir -p /opt/puppetlabs/server/data/staging/pe_repo
 
@@ -81,12 +79,8 @@ echo 'method find, search'                                >> /etc/puppetlabs/pup
 echo 'auth yes'                                           >> /etc/puppetlabs/puppet/auth.conf
 echo 'allow pe-internal-dashboard,pe-internal-classifier' >> /etc/puppetlabs/puppet/auth.conf
 
- puppet resource service puppet master ensure=running enable=true
- 
  apt-get install -y git
   
- puppet master 
- 
  cd /etc/puppet/
  mkdir git
  cd git
